@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-
+from common.validators import validate_user_age_from_token
 from .models import Category, Product, Review
 
 
@@ -25,6 +25,16 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = "__all__"
+
+
+
+    def validate(self, attrs):
+        
+        request = self.context.get('request')
+        if request:
+           
+            validate_user_age_from_token(request)
+        return attrs
 
 
 class ProductWithReviewsSerializer(serializers.ModelSerializer):
@@ -78,3 +88,6 @@ class ReviewValidateSerializer(serializers.Serializer):
             return Product.objects.get(id=product_id)
         except Product.DoesNotExist:
             raise ValidationError("Product does not exist")
+
+
+

@@ -1,5 +1,5 @@
 from collections import OrderedDict
-
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.pagination import PageNumberPagination
@@ -76,7 +76,7 @@ class ProductListCreateAPIView(ListCreateAPIView):
     queryset = Product.objects.select_related("category").all()
     serializer_class = ProductSerializer
     pagination_class = CustomPagination
-    permission_classes = [IsOwner | IsAnonymous]
+    permission_classes = [IsOwner | IsAnonymous,IsAuthenticated]
     # permission_classes = [IsOwner]
 
     def post(self, request, *args, **kwargs):

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
+from common.validators import validate_user_age_from_token
 from .models import ConfirmationCode, CustomUser
 
 
@@ -15,6 +15,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
         token["email"] = user.email
         token["is_staff"] = user.is_staff
+        token["birthdate"] = user.birthdate
         return token
 
 
